@@ -1,0 +1,38 @@
+INSERT INTO `queries` (
+  `%(_QUERY_ID)s`,
+  `%(_LOCATION_NAME)s`, 
+  `%(_LOCATION_TYPE)s`, 
+  `%(_COORDINATES)s`, 
+  `%(_PROVINCE_ID)s`, 
+  `%(_PROVINCE_NAME)s`, 
+  `%(_CITY_ID)s`, 
+  `%(_CITY_NAME)s`, 
+  `%(_DISTRICT_ID)s`, 
+  `%(_DISTRICT_NAME)s`, 
+  `%(_VILLAGE_ID)s`, 
+  `%(_VILLAGE_NAME)s`, 
+  `%(_POSTAL_CODE)s`, 
+  `%(_RATING)s`, 
+  `%(_REVIEWS)s`, 
+  `%(_DESCRIPTION)s`, 
+  `%(_LOCATION_LINK)s`
+) 
+VALUES (
+  %(_VALUES_QUERY_ID)s,
+  %(_VALUES_LOCATION_NAME)s, 
+  %(_VALUES_LOCATION_TYPE)s, 
+  ST_GeoFromText('POINT(%(_VALUES_LATITUDE)s %(_VALUES_LONGITUDE)s)', 4326), 
+  %(_VALUES_PROVINCE_ID)s, 
+  %(_VALUES_PROVINCE_NAME)s, 
+  %(_VALUES_CITY_ID)s, 
+  %(_VALUES_CITY_NAME)s, 
+  %(_VALUES_DISTRICT_ID)s, 
+  %(_VALUES_DISTRICT_NAME)s, 
+  %(_VALUES_VILLAGE_ID)s, 
+  %(_VALUES_VILLAGE_NAME)s, 
+  %(_VALUES_POSTAL_CODE)s, 
+  %(_VALUES_RATING)s, 
+  %(_VALUES_REVIEWS)s, 
+  %(_VALUES_DESCRIPTION)s, 
+  %(_VALUES_LOCATION_LINK)s
+);

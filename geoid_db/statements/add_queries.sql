@@ -1,0 +1,14 @@
+INSERT INTO `queries` (
+  `%(_QUERY_TERM)s`, 
+  `%(_QUERY_LOCATION)s`, 
+  `%(_QUERY_KEYWORD)s`, 
+  `%(_QUERY_LANG)s`, 
+  `%(_QUERY_TIMESTAMP)s`
+) 
+VALUES (
+  %(_VALUES_QUERY_TERM)s, 
+  %(_VALUES_QUERY_LOCATION)s, 
+  %(_VALUES_QUERY_KEYWORD)s, 
+  %(_VALUES_QUERY_LANG)s, 
+  %(_VALUES_QUERY_TIMESTAMP)s
+);
