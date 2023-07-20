@@ -15,12 +15,21 @@ def connect():
       New database engine instance
   """
 
-  try:
-    config = _load_config()
-  except FileNotFoundError:
-    print(f'Could not find "config.toml" in active directory')
-    return
+  config_db = _load_config_db()
+  return create_engine(ENGINE % config_db)
 
+
+def _load_config_db():
+  """
+  Load database configuration from config.toml for use in connect().
+
+  Returns:
+      Dict of config.toml table [database]
+  """
+
+  with open('config.toml', 'rb') as f:
+    config = tomllib.load(f)
+  
   config_db = config['database']
   for key in config_db.keys():
     if type(config_db[key]) is str:
@@ -30,17 +39,3 @@ def connect():
   host      = config_db['host']
   port      = config_db['port']
   print(f'Connecting to database: {username}@{host}:{port}')
-
-  return create_engine(ENGINE % config_db)
-
-
-def _load_config():
-  """
-  Load configuration file config.toml in active (`__main__`) directory.
-
-  Returns:
-      Dict parsed from config.toml
-  """
-
-  with open('config.toml', 'rb') as f:
-    return tomllib.load(f)
