@@ -15,11 +15,11 @@ class Queries(Base):
   __tablename__ = 'queries'
 
   id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-  term      : Mapped[str] = mapped_column(types.String(255))
-  location  : Mapped[str] = mapped_column(types.String(255))
+  term      : Mapped[str] = mapped_column(types.String(255), index=True)
+  location  : Mapped[str] = mapped_column(types.String(255), index=True)
   keyword   : Mapped[str] = mapped_column(types.String(255))
   lang      : Mapped[str] = mapped_column(types.String(2))
-  timestamp : Mapped[int] = mapped_column(types.BigInteger())
+  timestamp : Mapped[int] = mapped_column(types.BigInteger(), index=True)
 
   results: Mapped[List['Places']] = relationship(
     back_populates='query', cascade='all, delete-orphan'
