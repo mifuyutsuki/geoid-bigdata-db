@@ -16,20 +16,24 @@ def add_from_file(filename: str, engine):
 
   with open(filename, 'r', encoding='UTF-8') as f:
     queries_data = json.load(f)
-  
-  entries = []
-  for query_object in queries_data:
-    entries.append(_create_entry(query_object))
 
   with Session(engine) as session:
-    session.add_all(entries)
+    for query_object in queries_data:
+      session.add(_create_entry(query_object))
     session.commit()
   
 
 def _create_entry(query_object: dict):
-  query_results = []
+  queries = tables.Queries(
+    term      = query_object[Keys.QUERY_TERM],
+    location  = query_object[Keys.QUERY_LOCATION],
+    keyword   = query_object[Keys.QUERY_KEYWORD],
+    lang      = query_object[Keys.QUERY_LANG],
+    timestamp = query_object[Keys.QUERY_TIMESTAMP]
+  )
+
   for query_result in query_object[Keys.QUERY_RESULTS]:
-    query_results.append(tables.Places(
+    queries.results.append(tables.Places(
       location_name = query_result[Keys.LOCATION_NAME],
       location_type = query_result[Keys.LOCATION_TYPE],
       latitude      = query_result[Keys.LATITUDE],
@@ -49,11 +53,4 @@ def _create_entry(query_object: dict):
       location_link = query_result[Keys.LOCATION_LINK]
     ))
 
-  return tables.Queries(
-    term      = query_object[Keys.QUERY_TERM],
-    location  = query_object[Keys.QUERY_LOCATION],
-    keyword   = query_object[Keys.QUERY_KEYWORD],
-    lang      = query_object[Keys.QUERY_LANG],
-    timestamp = query_object[Keys.QUERY_TIMESTAMP],
-    results   = query_results
-  )
+  return queries

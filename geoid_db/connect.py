@@ -39,3 +39,5 @@ def _load_config_db():
   host      = config_db['host']
   port      = config_db['port']
   print(f'Connecting to database: {username}@{host}:{port}')
+
+  return config_db

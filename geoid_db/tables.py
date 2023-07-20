@@ -1,4 +1,5 @@
 from sqlalchemy import types
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -48,4 +49,5 @@ class Places(Base):
   description   : Mapped[Optional[str]]   = mapped_column(types.UnicodeText())
   location_link : Mapped[str]             = mapped_column(types.String(1023))
 
+  query_id: Mapped[int] = mapped_column(ForeignKey('queries.id'))
   query: Mapped['Queries'] = relationship(back_populates='results')
