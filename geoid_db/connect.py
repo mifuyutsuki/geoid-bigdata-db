@@ -7,7 +7,7 @@ from urllib.parse import quote_plus
 ENGINE = '%(use_backend)s+%(use_driver)s://%(username)s:%(password)s@%(host)s:%(port)s/%(dbname)s'
 
 
-def connect():
+def connect(echo=False):
   """
   Connect to database using information given by config.toml.
 
@@ -16,7 +16,7 @@ def connect():
   """
 
   config_db = _load_config_db()
-  return create_engine(ENGINE % config_db)
+  return create_engine(ENGINE % config_db, echo=echo)
 
 
 def _load_config_db():
