@@ -7,27 +7,36 @@ from urllib.parse import quote_plus
 ENGINE = '%(use_backend)s+%(use_driver)s://%(username)s:%(password)s@%(host)s:%(port)s/%(dbname)s'
 
 
-def connect(echo=False):
+def connect(*, echo=False, config_file='config.toml'):
   """
-  Connect to database using information given by config.toml.
+  Connect to database and return an SQLAlchemy database engine instance.
+
+  By default, the file config.toml in the active path is used.
+
+  Kwargs:
+      echo (bool): Echo SQL statements emitted by the database engine
+      config_file (str): Filename of the config TOML file
 
   Returns:
       New database engine instance
   """
 
-  config_db = _load_config_db()
+  config_db = _load_config_db(config_file)
   return create_engine(ENGINE % config_db, echo=echo)
 
 
-def _load_config_db():
+def _load_config_db(config_file: str='config.toml'):
   """
-  Load database configuration from config.toml for use in connect().
+  Load database configuration from a config TOML file for use in connect().
+
+  Args:
+      config_file (str): Filename of the config TOML file
 
   Returns:
       Dict of config.toml table [database]
   """
 
-  with open('config.toml', 'rb') as f:
+  with open(config_file, 'rb') as f:
     config = tomllib.load(f)
   
   config_db = config['database']
