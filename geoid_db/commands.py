@@ -1,5 +1,5 @@
 from geoid_db.tables import Queries, Places
-from geoid_db.constants import Keys
+from geoid_db.constants import Keys, Status
 
 from sqlalchemy import select
 from sqlalchemy import Engine
@@ -120,9 +120,22 @@ def post_from_file(filename: str, engine: Engine):
 
   with Session(engine) as session:
     for query_object in queries_data:
-      session.add(_create_entry(query_object))
+      _add_entry(query_object, session)
     session.commit()
   
+
+def _add_entry(query_object: dict, session: Session):
+  if query_object.get(Keys.QUERY_KEYWORD) is None:
+    return
+  if query_object.get(Keys.QUERY_STATUS) != Status.QUERY_COMPLETE:
+    return
+  if query_object.get(Keys.QUERY_RESULTS) is None:
+    return
+  if len(query_object.get(Keys.QUERY_RESULTS)) <= 0:
+    return
+  
+  session.add(_create_entry(query_object))
+
 
 def _create_entry(query_object: dict):
   queries = Queries(
