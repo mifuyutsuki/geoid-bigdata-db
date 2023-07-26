@@ -9,6 +9,16 @@ from collections.abc import Sequence
 import json
 
 
+def get_queries_list(engine: Engine, limit: int=10, offset: int=0):
+  statement = select(Queries) \
+              .order_by(Queries.id) \
+              .limit(limit) \
+              .offset(offset)
+  
+  with Session(engine) as session:
+    return session.scalars(statement).all()
+
+
 def get_places_from_queries_id(queries_id: int, engine: Engine):
   """
   Get places associated with a Queries table entry `id`.
