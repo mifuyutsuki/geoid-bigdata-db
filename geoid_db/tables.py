@@ -26,6 +26,10 @@ class Queries(Base):
     back_populates='query', cascade='all, delete-orphan'
   )
 
+  def asdict(self):
+    #: Source: https://stackoverflow.com/a/1960546
+    return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class Places(Base):
   __tablename__ = 'places'
@@ -51,3 +55,7 @@ class Places(Base):
 
   query_id: Mapped[int] = mapped_column(ForeignKey('queries.id'))
   query: Mapped['Queries'] = relationship(back_populates='results')
+
+  def asdict(self):
+    #: Source: https://stackoverflow.com/a/1960546
+    return {c.name: getattr(self, c.name) for c in self.__table__.columns}
