@@ -31,6 +31,11 @@ def post_queries(data) -> tuple[dict, HTTPStatus]:
   return output, HTTPStatus.CREATED
 
 
+def delete_queries(id) -> tuple[str, HTTPStatus]:
+  commands.delete_queries(id, engine)
+  return '', HTTPStatus.NO_CONTENT
+
+
 def _dictify(objects) -> list[dict]:
   results = [dict() for i in range(len(objects))]
   for index, table in enumerate(objects):

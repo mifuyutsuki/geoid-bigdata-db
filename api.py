@@ -5,24 +5,29 @@ import sys
 
 app = Flask(__name__)
 
-@app.get('/queries/')
+@app.get('/queries')
 def get_queries_list():
   offset = request.args.get('offset')
   offset = int(offset) if offset else 0
   return commands.get_queries_list(offset=offset)
 
-@app.get('/<int:id>/')
+@app.get('/queries/<int:id>')
 def get_queries_one(id):
   return commands.get_queries_from_id(id)
 
-@app.get('/<int:id>/results')
+@app.get('/queries/<int:id>/results')
 def get_places_from_queries(id):
   return commands.get_places_from_queries_id(id)
 
-@app.post('/queries/new')
+@app.post('/queries')
 def post_from_json():
   request_data = request.get_json()
   return commands.post_queries(request_data)
+
+
+@app.delete('/queries/<int:id>')
+def delete_queries(id):
+  return commands.delete_queries(id)
 
 
 if __name__ == '__main__':

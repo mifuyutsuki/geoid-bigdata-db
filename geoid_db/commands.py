@@ -1,7 +1,7 @@
 from geoid_db.tables import Queries, Places
 from geoid_db.constants import Keys, Status
 
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 
@@ -142,6 +142,24 @@ def post_from_data(data, engine: Engine):
   with Session(engine) as session:
     for query_object in data:
       _add_entry(query_object, session)
+    session.commit()
+
+
+def delete_queries(id: int, engine: Engine):
+  """
+  Delete a queries data and its associated places from the geoid database.
+
+  Args:
+      id (int): Queries table ID
+      engine (Engine): Database engine instance
+  """
+  
+  statement = select(Queries) \
+              .where(Queries.id == id)
+
+  with Session(engine) as session:
+    selected = session.scalars(statement).first()
+    session.delete(selected)
     session.commit()
   
 
