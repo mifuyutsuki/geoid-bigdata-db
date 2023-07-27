@@ -8,4 +8,5 @@ class GeoidEngine:
   def engine(self):
     return self._engine
 
-engine = GeoidEngine()
+_engine_instance = GeoidEngine()
+engine = _engine_instance.engine
