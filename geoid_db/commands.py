@@ -8,6 +8,8 @@ from sqlalchemy.orm import Session
 from collections.abc import Sequence
 import json
 
+# TODO: Functions pass Session instead of Engine
+
 
 def get_queries_list(engine: Engine, limit: int=10, offset: int=0):
   statement = select(Queries) \
@@ -125,9 +127,20 @@ def post_from_file(filename: str, engine: Engine):
 
   with open(filename, 'r', encoding='UTF-8') as f:
     queries_data = json.load(f)
+  post_from_data(queries_data, engine)
+
+
+def post_from_data(data, engine: Engine):
+  """
+  Add a queries data to the geoid database.
+
+  Args:
+      data: JSON data containing queries data
+      engine (Engine): Database engine instance
+  """
 
   with Session(engine) as session:
-    for query_object in queries_data:
+    for query_object in data:
       _add_entry(query_object, session)
     session.commit()
   

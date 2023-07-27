@@ -19,6 +19,12 @@ def get_queries_one(id):
 def get_places_from_queries(id):
   return commands.get_places_from_queries_id(id)
 
+@app.post('/queries/new')
+def post_from_json():
+  request_data = request.get_json()
+  return commands.post_queries(request_data)
+
+
 if __name__ == '__main__':
   try:
     debug = sys.argv[1].lower() != 'prod'
