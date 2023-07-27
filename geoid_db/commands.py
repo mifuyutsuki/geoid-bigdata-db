@@ -1,7 +1,7 @@
 from geoid_db.tables import Queries, Places
 from geoid_db.constants import Keys, Status
 
-from sqlalchemy import select, delete
+from sqlalchemy import select
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 
@@ -9,6 +9,15 @@ from collections.abc import Sequence
 import json
 
 # TODO: Functions pass Session instead of Engine
+
+
+def queries_exists(id: int, engine: Engine):
+  statement = select(Queries.id) \
+              .where(Queries.id == id)
+  
+  with Session(engine) as session:
+    selected = session.scalars(statement).first()
+    return selected is not None
 
 
 def get_queries_list(engine: Engine, limit: int=10, offset: int=0):

@@ -17,6 +17,8 @@ def get_queries_from_id(id: int) -> tuple[list[dict], HTTPStatus]:
   
 
 def get_places_from_queries_id(id: int) -> tuple[list[dict], HTTPStatus]:
+  if not commands.queries_exists(id, engine):
+    return '', HTTPStatus.NOT_FOUND    
   objects = commands.get_places_from_queries_id(id, engine)
   return _dictify(objects), HTTPStatus.OK
 
