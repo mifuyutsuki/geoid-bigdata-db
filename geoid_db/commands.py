@@ -31,13 +31,11 @@ def get_places_from_queries_id(queries_id: int, engine: Engine):
       Sequence of combined Queries-Places
   """
 
-  statement = select(Queries, Places) \
-              .join(Places, Queries.results) \
-              .where(Queries.id == queries_id) \
-              .order_by(Places.id)
+  statement = select(Places) \
+              .where(Places.query_id == queries_id)
 
   with Session(engine) as session:
-    return session.execute(statement).all()
+    return session.scalars(statement).all()
 
 
 def get_queries_from_id(id: int, engine: Engine):
