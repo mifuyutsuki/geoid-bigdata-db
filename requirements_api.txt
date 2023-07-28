@@ -2,3 +2,5 @@ mysql-connector-python
 sqlalchemy
 pymysql
 flask
+flask-sqlalchemy
+python-dotenv
