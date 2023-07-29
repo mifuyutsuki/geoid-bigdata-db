@@ -1,0 +1,14 @@
+[project]
+name = "geoid_db"
+version = "0.1.0"
+description = "GeoID database API."
+dependencies = [
+  "sqlalchemy",
+  "flask",
+  "flask-sqlalchemy",
+  "pymysql"
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"

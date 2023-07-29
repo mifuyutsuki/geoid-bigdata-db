@@ -1,33 +1,57 @@
-from flask import Flask
-from flask import request
-from geoid_api import commands
+from flask import request, abort
+from geoid_db import app
+from geoid_db import queries
+from geoid_db import session
 import sys
 
-app = Flask(__name__)
+
+def _get_or_404(get):
+  if get is None:
+    abort(404)
+  else:
+    return get
+  
+
+@app.errorhandler(404)
+def handle_404(e):
+  return {
+    'message': 'Path not found.'
+  }, 404
+
 
 @app.get('/queries')
-def get_queries_list():
+def list_queries():
   offset = request.args.get('offset')
   offset = int(offset) if offset else 0
-  return commands.get_queries_list(offset=offset)
+
+  with session.begin() as s:
+    return _get_or_404(queries.list_queries(s, offset=offset))
+
 
 @app.get('/queries/<int:id>')
-def get_queries_one(id):
-  return commands.get_queries_from_id(id)
+def get_queries(id):
+  with session.begin() as s:
+    return _get_or_404(queries.from_id(id, s))
+
 
 @app.get('/queries/<int:id>/results')
-def get_places_from_queries(id):
-  return commands.get_places_from_queries_id(id)
+def list_places(id):
+  with session.begin() as s:
+    return _get_or_404(queries.list_places(id, s))
+
 
 @app.post('/queries')
-def post_from_json():
+def add_queries():
   request_data = request.get_json()
-  return commands.post_queries(request_data)
+  with session.begin() as s:
+    return _get_or_404(queries.add(request_data))
 
 
 @app.delete('/queries/<int:id>')
 def delete_queries(id):
-  return commands.delete_queries(id)
+  with session.begin() as s:
+    queries.delete(id)
+  return ''
 
 
 if __name__ == '__main__':
