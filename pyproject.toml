@@ -4,9 +4,9 @@ version = "0.1.0"
 description = "GeoID database API."
 dependencies = [
   "sqlalchemy",
+  "pymysql",
   "flask",
-  "flask-sqlalchemy",
-  "pymysql"
+  "python-dotenv"
 ]
 
 [build-system]
