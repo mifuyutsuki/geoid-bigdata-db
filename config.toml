@@ -1,8 +1,0 @@
-[database]
-username = "geoid"       # Replace with your DB username
-password = "userbanned"  # Replace with your DB password
-host = "localhost"       # Replace with your DB host
-port = "3306"            # Replace with your DB port
-dbname = "geoid"         # `geoid` is default DB name
-use_backend = "mysql"    # MySQL is default backend
-use_driver = "pymysql"   # PyMySQL is default driver
