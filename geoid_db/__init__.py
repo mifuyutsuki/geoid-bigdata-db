@@ -12,3 +12,9 @@ engine = create_engine(DATABASE_URI)
 session = sessionmaker(engine)
 
 from geoid_db import api
+
+def create_app():
+  app.config.from_mapping(
+    SECRET_KEY=os.environ.get('SECRET_KEY'),
+  )
+  return app
