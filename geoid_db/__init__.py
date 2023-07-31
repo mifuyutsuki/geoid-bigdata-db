@@ -10,3 +10,5 @@ import os
 DATABASE_URI = '%(DB_BACKEND)s://%(DB_USERNAME)s:%(DB_PASSWORD)s@%(DB_HOST)s/%(DB_NAME)s' % os.environ
 engine = create_engine(DATABASE_URI)
 session = sessionmaker(engine)
+
+from geoid_db import api
