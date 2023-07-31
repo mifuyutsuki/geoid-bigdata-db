@@ -2,6 +2,7 @@ from flask import request, abort
 from geoid_db import app
 from geoid_db import queries
 from geoid_db import session
+from werkzeug.exceptions import HTTPException
 
 
 def _get_or_404(get):
@@ -11,15 +12,15 @@ def _get_or_404(get):
     return get
   
 
-@app.errorhandler(404)
-def handle_404(e):
+@app.errorhandler(HTTPException)
+def handle_http_errors(e):
   return {
     'error': {
       'code': e.code,
       'name': e.name,
       'description': e.description
     }
-  }, 404
+  }, e.code
 
 
 @app.get('/queries')
