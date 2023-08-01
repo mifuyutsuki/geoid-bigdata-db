@@ -27,9 +27,16 @@ def handle_http_errors(e):
 def list_queries():
   offset = request.args.get('offset')
   offset = int(offset) if offset else 0
+  if offset < 0:
+    abort(400)
+  
+  show = request.args.get('show')
+  show = int(show) if show else 20
+  if show < 1:
+    abort(400)
 
   with session.begin() as s:
-    return _get_or_404(queries.list_queries(s, offset=offset))
+    return _get_or_404(queries.list_queries(s, limit=show, offset=offset))
 
 
 @app.get('/queries/<int:id>')
