@@ -1,0 +1,18 @@
+List a query of a particular ID uploaded to the GeoID database.
+---
+parameters:
+  - name: id
+    in: path
+    description: ID of queries object in the database
+    required: true
+    type: integer
+    minimum: 1
+responses:
+  200:
+    description: Entry of a single query
+    schema:
+      $ref: '#/definitions/Queries'
+  default:
+    description: An error has occured
+    schema:
+      $ref: '#/definitions/Error'

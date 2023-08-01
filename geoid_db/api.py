@@ -25,7 +25,7 @@ def handle_http_errors(e):
 
 
 @app.get('/queries')
-@swag_from('apidocs/queries.yml')
+@swag_from('apidocs/queries_get.yml')
 def list_queries():
   offset = request.args.get('offset')
   offset = int(offset) if offset else 0
@@ -41,26 +41,30 @@ def list_queries():
     return _get_or_404(queries.list_queries(s, limit=show, offset=offset))
 
 
-@app.get('/queries/<int:id>')
-def get_queries(id):
-  with session.begin() as s:
-    return _get_or_404(queries.from_id(id, s))
-
-
-@app.get('/queries/<int:id>/results')
-def list_places(id):
-  with session.begin() as s:
-    return _get_or_404(queries.list_places(id, s))
-
-
 @app.post('/queries')
+@swag_from('apidocs/queries_post.yml')
 def add_queries():
   request_data = request.get_json()
   with session.begin() as s:
     return _get_or_404(queries.add(request_data))
 
 
+@app.get('/queries/<int:id>')
+@swag_from('apidocs/queries_id_get.yml')
+def get_queries(id):
+  with session.begin() as s:
+    return _get_or_404(queries.from_id(id, s))
+
+
+@app.get('/queries/<int:id>/results')
+@swag_from('apidocs/results_get.yml')
+def list_places(id):
+  with session.begin() as s:
+    return _get_or_404(queries.list_places(id, s))
+
+
 @app.delete('/queries/<int:id>')
+@swag_from('apidocs/queries_id_delete.yml')
 def delete_queries(id):
   with session.begin() as s:
     queries.delete(id)

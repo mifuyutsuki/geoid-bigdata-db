@@ -5,13 +5,59 @@ info:
   version: '0.1.0'
 
 definitions:
+  Place:
+    type: object
+    properties:
+      id:
+        type: integer
+        minimum: 1
+        example: 1
+      location_name:
+        type: string
+      location_type:
+        type: string
+      location_link:
+        type: string
+        format: url
+      latitude:
+        type: number
+        format: double
+      longitude:
+        type: number
+        format: double
+      province_id:
+        type: integer
+      province_name:
+        type: string
+      city_id:
+        type: integer
+      city_name:
+        type: string
+      district_id:
+        type: integer
+      district_name:
+        type: string
+      village_id:
+        type: integer
+        format: int64
+      village_name:
+        type: string
+      postal_code:
+        type: integer
+      rating:
+        type: number
+        format: float
+      reviews:
+        type: integer
+      description:
+        type: string
   Queries:
     type: object
     properties:
       id:
         type: integer
         minimum: 1
-        example: '1'
+        example: 1
       term:
         type: string
         example: 'pariwisata'
@@ -29,9 +75,41 @@ definitions:
         format: int64
         minimum: 0
         example: 1688360400
-    required:
-    - id
-    - keyword
+  PlaceInput:
+    allOf:
+    - $ref: '#/definitions/Place'
+    - type: object  
+      required:
+      - location_name
+      - location_link
+      - latitude
+      - longitude
+      - province_id
+      - province_name
+      - city_id
+      - city_name
+      - district_id
+      - district_name
+      - village_id
+      - village_name
+      - postal_code
+  QueriesInput:
+    allOf:
+    - $ref: '#/definitions/Queries'
+    - type: object
+      required:
+      - keyword
+      - lang
+      - timestamp
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/PlaceInput'
+  QueriesData:
+    type: array
+    items:
+      $ref: '#/definitions/QueriesInput'
   Error:
     type: object
     properties:

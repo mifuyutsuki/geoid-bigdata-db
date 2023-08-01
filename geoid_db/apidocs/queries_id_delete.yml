@@ -1,0 +1,16 @@
+Delete a query of a particular ID from the GeoID database.
+---
+parameters:
+  - name: id
+    in: path
+    description: ID of queries object in the database
+    required: true
+    type: integer
+    minimum: 1
+responses:
+  204:
+    description: Queries object is deleted
+  default:
+    description: An error has occured
+    schema:
+      $ref: '#/definitions/Error'

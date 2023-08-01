@@ -24,7 +24,7 @@ responses:
       type: array
       items:
         $ref: '#/definitions/Queries'
-  400:
-    description: Invalid query parameters
+  default:
+    description: An error has occured
     schema:
       $ref: '#/definitions/Error'
