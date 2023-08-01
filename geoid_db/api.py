@@ -1,4 +1,5 @@
 from flask import request, abort
+from flasgger import swag_from
 from geoid_db import app
 from geoid_db import queries
 from geoid_db import session
@@ -7,7 +8,7 @@ from werkzeug.exceptions import HTTPException
 
 def _get_or_404(get):
   if get is None:
-    abort(404)
+    abort(404, 'Database entry does not exist.')
   else:
     return get
   
@@ -24,16 +25,17 @@ def handle_http_errors(e):
 
 
 @app.get('/queries')
+@swag_from('apidocs/queries.yml')
 def list_queries():
   offset = request.args.get('offset')
   offset = int(offset) if offset else 0
   if offset < 0:
-    abort(400)
+    abort(400, 'Offset parameter cannot be a negative number.')
   
   show = request.args.get('show')
   show = int(show) if show else 20
   if show < 1:
-    abort(400)
+    abort(400, 'Show parameter cannot be less than one.')
 
   with session.begin() as s:
     return _get_or_404(queries.list_queries(s, limit=show, offset=offset))

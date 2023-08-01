@@ -2,7 +2,9 @@ from dotenv import load_dotenv
 load_dotenv('.env')
 
 from flask import Flask
+from flasgger import Swagger
 app = Flask(__name__)
+swagger = Swagger(app, template_file='apidocs/template.yml')
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

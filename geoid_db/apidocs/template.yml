@@ -1,0 +1,49 @@
+swagger: '2.0'
+info:
+  title: 'GeoID Database API'
+  description: 'Simple database API for queries created by GeoID (geoid-bigdata).'
+  version: '0.1.0'
+
+definitions:
+  Queries:
+    type: object
+    properties:
+      id:
+        type: integer
+        minimum: 1
+        example: '1'
+      term:
+        type: string
+        example: 'pariwisata'
+      location:
+        type: string
+        example: 'kota bandung'
+      keyword:
+        type: string
+        example: 'pariwisata kota bandung'
+      lang:
+        type: string
+        example: 'id'
+      timestamp:
+        type: integer
+        format: int64
+        minimum: 0
+        example: 1688360400
+    required:
+    - id
+    - keyword
+  Error:
+    type: object
+    properties:
+      error:
+        type: object
+        properties:
+          code:
+            type: integer
+            example: 404
+          name:
+            type: string
+            example: 'Not Found'
+          description:
+            type: string
+            example: 'Description of the error.'
