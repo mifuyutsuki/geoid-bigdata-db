@@ -21,9 +21,10 @@ def content_paged(results, *, limit=10, start=0, **kwargs):
     results_len = len(results)
 
     prev_start = max(start - limit, 0)
-    response_body['_links'].update({
-      'prev': {'href': url_for(request.endpoint, limit=limit, start=prev_start, **kwargs)}
-    })
+    if start > 0:
+      response_body['_links'].update({
+        'prev': {'href': url_for(request.endpoint, limit=limit, start=prev_start, **kwargs)}
+      })
 
     next_start = start + limit
     if results_len >= limit:
