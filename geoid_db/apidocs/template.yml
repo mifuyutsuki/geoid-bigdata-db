@@ -51,6 +51,10 @@ definitions:
         type: integer
       description:
         type: string
+      query_id:
+        type: integer
+        minimum: 1
+        example: 1
   Queries:
     type: object
     properties:
@@ -110,6 +114,60 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/QueriesInput'
+  Content:
+    type: object
+    properties:
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+                format: url
+                example: '/queries'
+  ContentPaged:
+    type: object
+    properties:
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+                format: url
+                example: '/queries?limit=10&start=10'
+          prev:
+            type: object
+            properties:
+              href:
+                type: string
+                format: url
+                example: '/queries?limit=10&start=0'
+          next:
+            type: object
+            properties:
+              href:
+                type: string
+                format: url
+                example: '/queries?limit=10&start=20'
+      limit:
+        type: integer
+        minimum: 1
+        default: 10
+        example: 10
+      start:
+        type: integer
+        minimum: 0
+        default: 0
+        example: 0
+      size:
+        type: integer
+        minimum: 0
+        example: 1
   Error:
     type: object
     properties:

@@ -3,16 +3,21 @@ List a query of a particular ID uploaded to the GeoID database.
 parameters:
   - name: id
     in: path
-    description: ID of queries object in the database
+    description: ID of queries object in the database.
     required: true
     type: integer
     minimum: 1
 responses:
   200:
-    description: Entry of a single query
+    description: Entry of a single query.
     schema:
-      $ref: '#/definitions/Queries'
+      allOf:
+      - $ref: '#/definitions/Content'
+      - type: object
+        properties:
+          results:
+            $ref: '#/definitions/Queries'
   default:
-    description: An error has occured
+    description: An error has occured.
     schema:
       $ref: '#/definitions/Error'
