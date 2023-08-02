@@ -14,23 +14,27 @@ def exists(id: int, session: Session):
   return selected is not None
 
 
-def list_queries(session: Session, *, limit: int=20, offset: int=0) -> list[dict]:
+def list_queries(
+  session: Session, *, limit: int=20, offset: int=0
+):
   statement = select(Queries) \
-              .order_by(Queries.id) \
+              .order_by(Queries.id.desc()) \
               .limit(limit) \
               .offset(offset)
 
   return _dictify(session.scalars(statement).all())
 
 
-def from_id(id: int, session: Session) -> list[dict]:
+def from_id(id: int, session: Session):
   statement = select(Queries) \
               .where(Queries.id == id)
   
   return _dictify(session.scalars(statement).first())
 
 
-def search_location(location: str, session: Session):
+def list_queries_by_location(
+  location: str, session: Session, *, limit: int=20, offset: int=0
+):
   """
   Get Queries IDs associated with query location `location`.
 
@@ -42,13 +46,18 @@ def search_location(location: str, session: Session):
       Sequence of IDs
   """
 
-  statement = select(Queries.id) \
-              .where(Queries.location == location.lower())
+  statement = select(Queries) \
+              .where(Queries.location == location.lower()) \
+              .order_by(Queries.id.desc()) \
+              .limit(limit) \
+              .offset(offset)
   
   return session.scalars(statement).all()
   
 
-def search_term(term: str, session: Session):
+def list_queries_by_term(
+  term: str, session: Session, *, limit: int=20, offset: int=0
+):
   """
   Get Queries IDs associated with query term `term`.
 
@@ -60,13 +69,16 @@ def search_term(term: str, session: Session):
       Sequence of IDs
   """
 
-  statement = select(Queries.id) \
-              .where(Queries.term == term.lower())
+  statement = select(Queries) \
+              .where(Queries.term == term.lower()) \
+              .order_by(Queries.id.desc()) \
+              .limit(limit) \
+              .offset(offset)
   
   return session.scalars(statement).all()
   
 
-def list_places(id: int, session: Session) -> list[dict] | None:
+def list_places(id: int, session: Session):
   """
   Get places associated with a Queries table entry `id`.
 
@@ -87,7 +99,7 @@ def list_places(id: int, session: Session) -> list[dict] | None:
     return _dictify(session.scalars(statement).all())
 
 
-def add(data, session: Session) -> dict:
+def add(data, session: Session):
   """
   Add a queries data to the geoid database.
 
