@@ -56,7 +56,7 @@ def list_queries_by_location(
   
 
 def list_queries_by_term(
-  term: str, session: Session, *, limit: int=20, offset: int=0
+  term: str, session: Session, *, limit=20, offset=0
 ):
   """
   Get Queries IDs associated with query term `term`.
@@ -78,7 +78,7 @@ def list_queries_by_term(
   return session.scalars(statement).all()
   
 
-def list_places(id: int, session: Session):
+def list_places(id: int, session: Session, *, limit=20, offset=0):
   """
   Get places associated with a Queries table entry `id`.
 
@@ -91,7 +91,10 @@ def list_places(id: int, session: Session):
   """
 
   statement = select(Places) \
-              .where(Places.query_id == id)
+              .where(Places.query_id == id) \
+              .order_by(Places.id) \
+              .limit(limit) \
+              .offset(offset)
 
   if not exists(id, session):
     return None
