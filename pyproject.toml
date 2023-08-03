@@ -6,6 +6,7 @@ dependencies = [
   "sqlalchemy",
   "pymysql",
   "flask",
+  "flasgger",
   "python-dotenv"
 ]
 
