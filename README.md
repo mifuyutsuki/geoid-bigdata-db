@@ -15,7 +15,8 @@ GeoID Database API is created as part of an internship program.
 * `/queries`: List of GeoID queries.
 * `/queries/<id>`: Information on a GeoID query with id `id`, which is assigned by the external database.
 * `/queries/<id>/results`: Places associated with GeoID query of id `id`.
-* `/apidocs`: API documentation powered by Swagger (via Flasgger).
+* `/places`: List of places obtained by GeoID queries.
+* `/apidocs`: API documentation.
 
 ## Requirements
 
@@ -41,8 +42,14 @@ pip install .
 
 Optionally, use `pip install -e .` to install an editable package.
 
-Before launching the API, make sure to set up a `.env` file with your database host and credentials. An example is given by `example.env`. Then you can launch the API in debug mode:
+Before launching the API, make sure to set up a `.env` file with your database host path and credentials. An example is given by `example.env`. Then you can launch the API in debug mode:
 
 ```cmd
 py -m geoid_db
+```
+
+Servers such as Waitress (downloaded separately) can be used to launch the database API in a production environment:
+
+```cmd
+waitress-serve --host 127.0.0.1 --call geoid_db:create_app
 ```
