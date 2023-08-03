@@ -1,9 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from geoid_db._processing import serialize
 from geoid_db.schema import Queries, Places
-from geoid_db.schema import SchemaBase
 from geoid_db.schema import add as add_entry
-from collections.abc import Sequence
 
 
 def exists(id: int, session: Session):
@@ -15,25 +14,25 @@ def exists(id: int, session: Session):
 
 
 def list_queries(
-  session: Session, *, limit: int=20, offset: int=0
+  session: Session, *, limit: int=10, offset: int=0
 ):
   statement = select(Queries) \
               .order_by(Queries.id.desc()) \
               .limit(limit) \
               .offset(offset)
 
-  return _dictify(session.scalars(statement).all())
+  return serialize(session.scalars(statement).all())
 
 
 def from_id(id: int, session: Session):
   statement = select(Queries) \
               .where(Queries.id == id)
   
-  return _dictify(session.scalars(statement).first())
+  return serialize(session.scalars(statement).first())
 
 
 def list_queries_by_location(
-  location: str, session: Session, *, limit: int=20, offset: int=0
+  location: str, session: Session, *, limit: int=10, offset: int=0
 ):
   """
   Get Queries IDs associated with query location `location`.
@@ -56,7 +55,7 @@ def list_queries_by_location(
   
 
 def list_queries_by_term(
-  term: str, session: Session, *, limit=20, offset=0
+  term: str, session: Session, *, limit=10, offset=0
 ):
   """
   Get Queries IDs associated with query term `term`.
@@ -78,7 +77,7 @@ def list_queries_by_term(
   return session.scalars(statement).all()
   
 
-def list_places(id: int, session: Session, *, limit=20, offset=0):
+def list_places(id: int, session: Session, *, limit=10, offset=0):
   """
   Get places associated with a Queries table entry `id`.
 
@@ -99,7 +98,7 @@ def list_places(id: int, session: Session, *, limit=20, offset=0):
   if not exists(id, session):
     return None
   else:
-    return _dictify(session.scalars(statement).all())
+    return serialize(session.scalars(statement).all())
 
 
 def add(data, session: Session):
@@ -134,27 +133,3 @@ def delete(id: int, session: Session):
   selected = session.scalars(statement).first()
   session.delete(selected)
   session.commit()
-
-
-def _dictify(tables) -> list[dict] | dict | None:
-  if tables is None:
-    #: Pass None instead
-    return None
-  
-  if isinstance(tables, Sequence):
-    return _dictify_sequence(tables)
-  elif isinstance(tables, SchemaBase):
-    return _dictify_table(tables)
-  else:
-    raise ValueError(f'Cannot dictify object of type "{str(type(tables))}"')
-
-
-def _dictify_table(table: SchemaBase) -> dict:
-  return table.asdict()
-
-
-def _dictify_sequence(tables: Sequence[SchemaBase]) -> list[dict]:
-  results = [dict() for i in range(len(tables))]
-  for index, table in enumerate(tables):
-    results[index].update(table.asdict())
-  return results

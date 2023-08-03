@@ -1,8 +1,9 @@
-from flask import request, abort, url_for
+from flask import request, abort
 from flasgger import swag_from
 from geoid_db import app
-from geoid_db import queries
+from geoid_db import queries, places
 from geoid_db import session
+from geoid_db._processing import content, content_paged
 from werkzeug.exceptions import HTTPException
 from http import HTTPStatus
 
@@ -14,41 +15,19 @@ def _get_or_404(get):
     return get
 
 
-def content_paged(results, *, limit=10, start=0, **kwargs):
-  response_body = content(results, **kwargs)
+def _get_start_limit():
+  start = request.args.get('start')
+  start = int(start) if start else 0
+  if start < 0:
+    abort(HTTPStatus.BAD_REQUEST, 'Start parameter cannot be a negative number.')
 
-  if isinstance(results, list):
-    results_len = len(results)
+  limit = request.args.get('limit')
+  limit = int(limit) if limit else 10
+  if limit < 1:
+    abort(HTTPStatus.BAD_REQUEST, 'Limit parameter cannot be less than one.')
 
-    prev_start = max(start - limit, 0)
-    if start > 0:
-      response_body['_links'].update({
-        'prev': {'href': url_for(request.endpoint, limit=limit, start=prev_start, **kwargs)}
-      })
-
-    next_start = start + limit
-    if results_len >= limit:
-      response_body['_links'].update({
-        'next': {'href': url_for(request.endpoint, limit=limit, start=next_start, **kwargs)}
-      })
-
-    response_body.update({
-      'size': len(results),
-      'limit': limit,
-      'start': start
-    })
-
-  return response_body
-
-
-def content(results, **kwargs):
-  return {
-    '_links': {
-      'self': {'href': url_for(request.endpoint, **kwargs, **request.args.to_dict())}
-    },
-    'results': results
-  }
-
+  return start, limit
+  
 
 @app.errorhandler(HTTPException)
 def handle_http_errors(e):
@@ -61,21 +40,17 @@ def handle_http_errors(e):
   }, e.code
 
 
+# =============================================================================
+# =============================================================================
+
+
 @app.get('/queries')
 @swag_from('apidocs/queries_get.yml')
 def list_queries():
-  start = request.args.get('start')
-  start = int(start) if start else 0
-  if start < 0:
-    abort(HTTPStatus.BAD_REQUEST, 'Start parameter cannot be a negative number.')
-  
-  limit = request.args.get('limit')
-  limit = int(limit) if limit else 10
-  if limit < 1:
-    abort(HTTPStatus.BAD_REQUEST, 'Limit parameter cannot be less than one.')
+  start, limit = _get_start_limit()
 
   with session.begin() as s:
-    get = _get_or_404(queries.list_queries(s, limit=limit, offset=start))
+    get = _get_or_404(queries.list_queries(s, offset=start, limit=limit))
   return content_paged(get, limit=limit, start=start), HTTPStatus.OK
 
 
@@ -98,19 +73,11 @@ def get_queries(id):
 
 @app.get('/queries/<int:id>/results')
 @swag_from('apidocs/results_get.yml')
-def list_places(id):
-  start = request.args.get('start')
-  start = int(start) if start else 0
-  if start < 0:
-    abort(HTTPStatus.BAD_REQUEST, 'Start parameter cannot be a negative number.')
-  
-  limit = request.args.get('limit')
-  limit = int(limit) if limit else 10
-  if limit < 1:
-    abort(HTTPStatus.BAD_REQUEST, 'Limit parameter cannot be less than one.')
+def list_queries_results(id):
+  start, limit = _get_start_limit()
 
   with session.begin() as s:
-    get = _get_or_404(queries.list_places(id, s, limit=limit, offset=start))
+    get = _get_or_404(queries.list_places(id, s, offset=start, limit=limit))
   return content_paged(get, limit=limit, start=start, id=id), HTTPStatus.OK
 
 
@@ -120,3 +87,16 @@ def delete_queries(id):
   with session.begin() as s:
     queries.delete(id, s)
   return '', HTTPStatus.NO_CONTENT
+
+
+# =============================================================================
+# =============================================================================
+
+
+@app.get('/places')
+def list_places():
+  start, limit = _get_start_limit()
+
+  with session.begin() as s:
+    get = _get_or_404(places.list_places(s, offset=start, limit=limit))
+  return content_paged(get, limit=limit, start=start), HTTPStatus.OK
