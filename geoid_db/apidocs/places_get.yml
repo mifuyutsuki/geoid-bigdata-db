@@ -1,0 +1,36 @@
+List places returned by queries uploaded to the GeoID database.
+
+Results are listed paginated in descending order from the entry with the highest ID.
+Higher IDs correspond to more recent additions.
+---
+parameters:
+  - name: start
+    in: query
+    description: Starting offset position of list results.
+    required: false
+    type: integer
+    default: 0
+    minimum: 0
+  - name: limit
+    in: query
+    description: Number of list results to show.
+    required: false
+    type: integer
+    default: 10
+    minimum: 1
+responses:
+  200:
+    description: List of queries.
+    schema:
+      allOf:
+      - $ref: '#/definitions/ContentPaged'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/definitions/Place'
+  default:
+    description: An error has occured.
+    schema:
+      $ref: '#/definitions/Error'

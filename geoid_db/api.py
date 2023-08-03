@@ -94,6 +94,7 @@ def delete_queries(id):
 
 
 @app.get('/places')
+@swag_from('apidocs/places_get.yml')
 def list_places():
   start, limit = _get_start_limit()
 
