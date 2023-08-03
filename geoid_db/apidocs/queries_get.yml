@@ -1,6 +1,7 @@
 List queries uploaded to the GeoID database.
 
 Results are listed paginated in descending order from the entry with the highest ID.
+Higher IDs correspond to more recent additions.
 ---
 parameters:
   - name: start
