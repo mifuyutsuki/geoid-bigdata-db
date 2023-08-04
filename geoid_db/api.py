@@ -69,9 +69,16 @@ def handle_http_errors(e):
 @swag_from('apidocs/queries_get.yml')
 def list_queries():
   start, limit = _get_start_limit()
+  location     = request.args.get('location')
+  term         = request.args.get('term')
 
   with session.begin() as s:
-    get = _get_or_404(queries.list_queries(s, offset=start, limit=limit))
+    get = _get_or_404(
+      queries.list_queries(
+        s, location=location, term=term,
+        offset=start, limit=limit
+      )
+    )
   return content_paged(get, limit=limit, start=start), HTTPStatus.OK
 
 

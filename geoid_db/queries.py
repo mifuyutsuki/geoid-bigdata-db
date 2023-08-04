@@ -34,17 +34,6 @@ def exists(id: int, session: Session):
   return selected is not None
 
 
-def list_queries(
-  session: Session, *, limit: int=10, offset: int=0
-):
-  statement = select(Queries) \
-              .order_by(Queries.id.desc()) \
-              .limit(limit) \
-              .offset(offset)
-
-  return serialize(session.scalars(statement).all())
-
-
 def from_id(id: int, session: Session):
   statement = select(Queries) \
               .where(Queries.id == id)
@@ -52,50 +41,32 @@ def from_id(id: int, session: Session):
   return serialize(session.scalars(statement).first())
 
 
-def list_queries_by_location(
-  location: str, session: Session, *, limit: int=10, offset: int=0
+def list_queries(
+  session: Session,
+  *,
+  location: str=None,
+  term: str=None,
+  offset=0,
+  limit=10
 ):
-  """
-  Get Queries IDs associated with query location `location`.
+  selection = select(Queries)
+  if location is not None:
+    selection = selection.where(
+      Queries.location.like(f'%{location.strip()}%')
+    )
+  if term is not None:
+    selection = selection.where(
+      Queries.term.like(f'%{term.strip()}%')
+    )
 
-  Args:
-      location (str): Query location (case-insensitive)
-      engine (Engine): Database engine instance
-  
-  Returns:
-      Sequence of IDs
-  """
+  statement = (
+    selection
+    .order_by(Queries.id.desc())
+    .limit(limit)
+    .offset(offset)
+  )
 
-  statement = select(Queries) \
-              .where(Queries.location == location.lower()) \
-              .order_by(Queries.id.desc()) \
-              .limit(limit) \
-              .offset(offset)
-  
-  return session.scalars(statement).all()
-  
-
-def list_queries_by_term(
-  term: str, session: Session, *, limit=10, offset=0
-):
-  """
-  Get Queries IDs associated with query term `term`.
-
-  Args:
-      term (str): Query term (case-insensitive)
-      engine (Engine): Database engine instance
-  
-  Returns:
-      Sequence of IDs
-  """
-
-  statement = select(Queries) \
-              .where(Queries.term == term.lower()) \
-              .order_by(Queries.id.desc()) \
-              .limit(limit) \
-              .offset(offset)
-  
-  return session.scalars(statement).all()
+  return serialize(session.scalars(statement).all())
   
 
 def list_places(id: int, session: Session, *, limit=10, offset=0):
