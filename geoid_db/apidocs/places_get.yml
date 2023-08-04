@@ -4,13 +4,6 @@ Results are listed paginated in descending order from the entry with the highest
 Higher IDs correspond to more recent additions.
 ---
 parameters:
-  - name: start
-    in: query
-    description: Starting offset position of list results.
-    required: false
-    type: integer
-    default: 0
-    minimum: 0
   - name: limit
     in: query
     description: Number of list results to show.
@@ -18,6 +11,13 @@ parameters:
     type: integer
     default: 10
     minimum: 1
+  - name: start
+    in: query
+    description: Starting offset position of list results.
+    required: false
+    type: integer
+    default: 0
+    minimum: 0
 responses:
   200:
     description: List of queries.

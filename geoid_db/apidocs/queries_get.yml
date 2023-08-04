@@ -4,6 +4,12 @@ Results are listed paginated in descending order from the entry with the highest
 Higher IDs correspond to more recent additions.
 ---
 parameters:
+  - name: limit
+    in: query
+    description: Number of list results to show.
+    required: false
+    type: integer
+    default: 10
   - name: start
     in: query
     description: Starting offset position of list results.
@@ -11,13 +17,19 @@ parameters:
     type: integer
     default: 0
     minimum: 0
-  - name: limit
-    in: query
-    description: Number of list results to show.
-    required: false
-    type: integer
-    default: 10
     minimum: 1
+  - name: term
+    in: query
+    description: Filter by query term.
+    required: false
+    type: string
+    example: kampus
+  - name: location
+    in: query
+    description: Filter by query location.
+    required: false
+    type: string
+    example: kota bandung
 responses:
   200:
     description: List of queries.

@@ -9,13 +9,6 @@ parameters:
     required: true
     type: integer
     minimum: 1
-  - name: start
-    in: query
-    description: Starting offset position of list results.
-    required: false
-    type: integer
-    default: 0
-    minimum: 0
   - name: limit
     in: query
     description: Number of list results to show.
@@ -23,6 +16,13 @@ parameters:
     type: integer
     default: 10
     minimum: 1
+  - name: start
+    in: query
+    description: Starting offset position of list results.
+    required: false
+    type: integer
+    default: 0
+    minimum: 0
 responses:
   200:
     description: List of places.

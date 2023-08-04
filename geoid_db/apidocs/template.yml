@@ -14,43 +14,60 @@ definitions:
         example: 1
       location_name:
         type: string
+        example: 'Institut Teknologi Bandung'
       location_type:
         type: string
+        example: 'Universitas Negeri'
       location_link:
         type: string
         format: url
+        example: 'http://127.0.0.1:5000/queries'
       latitude:
         type: number
         format: double
+        example: -6.89148
       longitude:
         type: number
         format: double
+        example: 107.6106591
       province_id:
         type: integer
+        example: 32
       province_name:
         type: string
+        example: 'Jawa Barat'
       city_id:
         type: integer
+        example: 3273
       city_name:
         type: string
+        example: 'Kota Bandung'
       district_id:
         type: integer
+        example: 327302
       district_name:
         type: string
+        example: 'Coblong'
       village_id:
         type: integer
         format: int64
+        example: 3273021006
       village_name:
         type: string
+        example: 'Lebak Siliwangi'
       postal_code:
         type: integer
+        example: 40132
       rating:
         type: number
         format: float
+        example: 4.7
       reviews:
         type: integer
+        example: 5000
       description:
         type: string
+        example: 'Jl. Ganesa No.10, Lb. Siliwangi, Kecamatan Coblong, Kota Bandung, Jawa Barat 40132'
       query_id:
         type: integer
         minimum: 1
@@ -64,13 +81,13 @@ definitions:
         example: 1
       term:
         type: string
-        example: 'pariwisata'
+        example: 'kampus'
       location:
         type: string
         example: 'kota bandung'
       keyword:
         type: string
-        example: 'pariwisata kota bandung'
+        example: 'kampus kota bandung'
       lang:
         type: string
         example: 'id'
