@@ -30,23 +30,44 @@ In addition, by default, GeoID Database API connects to a MySQL 8.0 database usi
 
 ## Setup
 
-First, clone this repository to a path of your choosing, then create a virtual environment in the path, to prevent dependency conflicts with your other Python applications and projects. For example:
+The following command-line setup is for Windows. Steps should be similar for Unix/macOS (replace `py` with `python3`, `copy` with `cp`, etc.)
 
-```cmd
-git clone https://github.com/mifuyutsuki/geoid-bigdata-db
-cd geoid-bigdata-db
-py -m venv .venv
-./.venv/Scripts/Activate.bat
-pip install .
-```
+1. Clone/download this repository and go (`cd`) to the cloned repository's path
 
-Optionally, use `pip install -e .` to install an editable package.
+   ```cmd
+   git clone https://github.com/mifuyutsuki/geoid-bigdata-db
+   cd geoid-bigdata-db
+   ```
 
-Before launching the API, make sure to set up a `.env` file with your database host path and credentials. An example is given by `example.env`. Then you can launch the API in debug mode:
+2. Create and activate virtual environment (`venv`)
 
-```cmd
-py -m geoid_db
-```
+   Using virtual environments avoids dependency conflicts with your other Python applications and projects.
+
+   ```cmd
+   py -m venv .venv
+   .venv\scripts\activate.bat
+   ```
+
+3. Install dependencies listed in `requirements.txt`
+
+   ```cmd
+   pip install -r requirements.txt
+   ```
+
+4. Set up environment variables `.env` (example given by `example.env`)
+
+   **This file contains your database credentials.** The following example copies `example.env` and launches Visual Studio Code (`code`) for editing.
+
+   ```cmd
+   copy example.env .env
+   code .env
+   ```
+
+5. Launch API
+
+   ```cmd
+   flask --app geoid_db run
+   ```
 
 Servers such as Waitress (downloaded separately) can be used to launch the database API in a production environment:
 
