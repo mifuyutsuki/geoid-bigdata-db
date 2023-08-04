@@ -19,6 +19,11 @@
 # SOFTWARE.
 
 
+import os
+if not os.path.isfile('.env'):
+  print('No environment variables file .env detected')
+  quit(1)
+
 from dotenv import load_dotenv
 load_dotenv('.env')
 
@@ -29,7 +34,6 @@ swagger = Swagger(app, template_file='apidocs/template.yml')
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import os
 DATABASE_URI = '%(DB_BACKEND)s://%(DB_USERNAME)s:%(DB_PASSWORD)s@%(DB_HOST)s/%(DB_NAME)s' % os.environ
 engine = create_engine(DATABASE_URI)
 session = sessionmaker(engine)
