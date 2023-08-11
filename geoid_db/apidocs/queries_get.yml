@@ -17,7 +17,6 @@ parameters:
     type: integer
     default: 0
     minimum: 0
-    minimum: 1
   - name: term
     in: query
     description: Filter by query term.

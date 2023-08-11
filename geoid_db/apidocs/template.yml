@@ -105,15 +105,6 @@ definitions:
       - location_link
       - latitude
       - longitude
-      - province_id
-      - province_name
-      - city_id
-      - city_name
-      - district_id
-      - district_name
-      - village_id
-      - village_name
-      - postal_code
   QueriesInput:
     allOf:
     - $ref: '#/definitions/Queries'
