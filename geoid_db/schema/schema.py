@@ -21,7 +21,11 @@
 
 from sqlalchemy.orm import Session
 from .consts import Keys, Status
-from .tables import Queries, Places
+from .tables import Queries, Places, Base
+
+
+def init(engine):
+  Base.metadata.create_all(engine, checkfirst=True)
 
 
 def add(query_object: dict, session: Session):

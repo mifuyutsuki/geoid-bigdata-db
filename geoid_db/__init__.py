@@ -39,6 +39,8 @@ engine = create_engine(DATABASE_URI)
 session = sessionmaker(engine)
 
 from geoid_db import api
+from geoid_db.schema import init
+init(engine)
 
 def create_app():
   app.config.from_mapping(

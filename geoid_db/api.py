@@ -87,7 +87,7 @@ def list_queries():
 def add_queries():
   request_data = request.get_json()
   with session.begin() as s:
-    get = _get_or_404(queries.add(request_data))
+    get = _get_or_404(queries.add(request_data, s))
   return content(get), HTTPStatus.CREATED
 
 
